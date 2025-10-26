@@ -1,0 +1,88 @@
+/* Weekly Todo Cards Plugin Styles */
+
+.wtc-board {
+    display: flex;
+    gap: 16px;
+    font-family: var(--font-interface);
+    margin: 20px 0;
+}
+
+.wtc-card {
+    flex: 1;
+    background: #FFFAF0;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    border: 1px solid #e5e5e5;
+    padding: 0;
+}
+
+.wtc-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+}
+
+.wtc-date {
+    font-weight: 600;
+    font-size: 14px;
+    color: #2c3e50;
+    letter-spacing: 0.3px;
+}
+
+.wtc-badge {
+    font-size: 11px;
+    background: #6b7280;
+    color: #fff;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-weight: 500;
+}
+
+.wtc-body {
+    padding: 6px 12px 10px 12px;
+}
+
+.wtc-task-row {
+    display: flex;
+    align-items: center;
+    margin: 4px 0;
+    gap: 8px;
+    padding: 2px 0;
+}
+
+.wtc-txt {
+    flex: 1;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #374151;
+}
+
+.wtc-task-row.wtc-done .wtc-txt {
+    text-decoration: line-through;
+    color: #9ca3af;
+}
+
+.wtc-checkbox {
+    width: 16px;
+    height: 16px;
+    accent-color: #667eea;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.wtc-empty {
+    color: #9ca3af;
+    font-size: 13px;
+    text-align: center;
+    padding: 20px 0;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .wtc-board {
+        flex-direction: column;
+        gap: 12px;
+    }
+}

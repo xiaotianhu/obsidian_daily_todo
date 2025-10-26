@@ -1,0 +1,10 @@
+{
+  "id": "weekly-todo-cards",
+  "name": "Weekly Todo Cards",
+  "version": "1.0.0",
+  "minAppVersion": "0.15.0",
+  "description": "Display weekly todos in beautiful card-based layout with live preview support",
+  "author": "Your Name",
+  "authorUrl": "",
+  "isDesktopOnly": false
+}
