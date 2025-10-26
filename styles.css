@@ -1,14 +1,19 @@
-/* Weekly Todo Cards Plugin Styles */
+/* Column Todo Cards Plugin Styles */
+
+.wtc-container {
+    font-family: var(--font-interface);
+}
 
 .wtc-board {
     display: flex;
-    gap: 16px;
-    font-family: var(--font-interface);
-    margin: 20px 0;
+    flex-wrap: wrap;
+    margin: 16px 0;
+    /* gap 由设置控制 */
 }
 
 .wtc-card {
-    flex: 1;
+    flex: 0 0 auto;
+    /* width, min-width, max-width 由设置控制 */
     background: #FFFAF0;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);

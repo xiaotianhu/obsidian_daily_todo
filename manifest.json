@@ -1,10 +1,10 @@
 {
-  "id": "weekly-todo-cards",
-  "name": "Weekly Todo Cards",
-  "version": "1.0.0",
+  "id": "column-todo-cards",
+  "name": "Column Todo Cards",
+  "version": "2.0.0",
   "minAppVersion": "0.15.0",
-  "description": "Display weekly todos in beautiful card-based layout with live preview support",
-  "author": "Your Name",
+  "description": "Display todos in beautiful card-based layout with live preview support. Auto-wraps to multiple rows with customizable width.",
+  "author": "Rainy",
   "authorUrl": "",
   "isDesktopOnly": false
 }
