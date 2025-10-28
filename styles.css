@@ -57,6 +57,10 @@
     padding: 2px 0;
 }
 
+.wtc-task-row.wtc-indented {
+    margin-left: 20px;
+}
+
 .wtc-txt {
     flex: 1;
     font-size: 13px;

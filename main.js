@@ -66,7 +66,9 @@ class ColumnTodoRenderer extends MarkdownRenderChild {
             const m = l.match(/^(\s*)- \[([ x])\] (.+)/);
             if (m && cur) {
                 if (!todos[cur]) todos[cur] = [];
-                todos[cur].push({ text: m[3], done: m[2] === "x" });
+                // 检测是否有缩进（至少4个空格或1个制表符）
+                const hasIndent = m[1].length >= 4 || m[1].includes('\t');
+                todos[cur].push({ text: m[3], done: m[2] === "x", indented: hasIndent });
             }
         });
 
@@ -90,7 +92,7 @@ class ColumnTodoRenderer extends MarkdownRenderChild {
             const headerColor = colors[index % colors.length];
 
             const tasksHtml = list.map(t => `
-                <div class="wtc-task-row ${t.done ? "wtc-done" : "wtc-pending"}">
+                <div class="wtc-task-row ${t.done ? "wtc-done" : "wtc-pending"} ${t.indented ? "wtc-indented" : ""}">
                     <input type="checkbox"
                            class="wtc-checkbox"
                            ${t.done ? "checked" : ""}
