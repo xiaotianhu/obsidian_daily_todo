@@ -1,7 +1,7 @@
 {
   "id": "column-todo-cards",
   "name": "Column Todo Cards",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "minAppVersion": "0.15.0",
   "description": "Display todos in beautiful card-based layout with live preview support. Auto-wraps to multiple rows with customizable width.",
   "author": "Rainy",

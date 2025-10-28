@@ -57,8 +57,12 @@ class ColumnTodoRenderer extends MarkdownRenderChild {
         const todos = {};
         let cur = "";
         this.source.split("\n").forEach(l => {
-            const d = l.match(/\[(\d{4}-\d{2}-\d{2})\]/);
-            if (d) { cur = d[1]; return; }
+            // 匹配标题行：以 [内容] 开头，后面没有其他内容的行
+            const d = l.match(/^\[([^\]]+)\]\s*$/);
+            if (d) { 
+                cur = d[1]; 
+                return; 
+            }
             const m = l.match(/^(\s*)- \[([ x])\] (.+)/);
             if (m && cur) {
                 if (!todos[cur]) todos[cur] = [];
@@ -66,11 +70,11 @@ class ColumnTodoRenderer extends MarkdownRenderChild {
             }
         });
 
-        // 获取所有日期并排序
-        const allDates = Object.keys(todos).sort();
+        // 获取所有标题并保持原始顺序
+        const allTitles = Object.keys(todos);
 
         // 如果没有数据，显示提示
-        if (allDates.length === 0) {
+        if (allTitles.length === 0) {
             this.containerEl.innerHTML = '<div class="wtc-empty">No tasks found</div>';
             return;
         }
@@ -78,9 +82,8 @@ class ColumnTodoRenderer extends MarkdownRenderChild {
         // 生成卡片 HTML
         const colors = ['#FFE4B5', '#FFD4B5', '#FFE5CC', '#FFF4E0', '#FFEFD5', '#FFE4C4', '#FFDAB9'];
 
-        const cards = allDates.map((dateStr, index) => {
-            const date = window.moment(dateStr);
-            const key = dateStr;
+        const cards = allTitles.map((title, index) => {
+            const key = title;
             const list = todos[key] || [];
             const total = list.length;
             const done = list.filter(t => t.done).length;
@@ -91,16 +94,26 @@ class ColumnTodoRenderer extends MarkdownRenderChild {
                     <input type="checkbox"
                            class="wtc-checkbox"
                            ${t.done ? "checked" : ""}
-                           data-date="${key}"
+                           data-title="${key}"
                            data-text="${t.text.replace(/"/g, '&quot;')}">
                     <div class="wtc-txt">${t.text}</div>
                 </div>
             `).join("");
 
+            // 判断是否为日期格式
+            const isDate = /^\d{4}-\d{2}-\d{2}$/.test(title);
+            let headerText;
+            if (isDate) {
+                const date = window.moment(title);
+                headerText = date.format("ddd MM/DD");
+            } else {
+                headerText = title;
+            }
+
             return `
                 <div class="wtc-card">
                     <div class="wtc-header" style="background-color: ${headerColor}">
-                        <span class="wtc-date">${date.format("ddd MM/DD")}</span>
+                        <span class="wtc-date">${headerText}</span>
                         <span class="wtc-badge">${done}/${total}</span>
                     </div>
                     <div class="wtc-body">${tasksHtml || "<div class='wtc-empty'>No tasks</div>"}</div>
@@ -128,7 +141,7 @@ class ColumnTodoRenderer extends MarkdownRenderChild {
         this.containerEl.querySelectorAll('.wtc-checkbox').forEach(checkbox => {
             checkbox.addEventListener('change', async (e) => {
                 await this.updateTodo(
-                    e.target.dataset.date,
+                    e.target.dataset.title,
                     e.target.dataset.text,
                     e.target.checked
                 );
@@ -136,13 +149,15 @@ class ColumnTodoRenderer extends MarkdownRenderChild {
         });
     }
 
-    async updateTodo(date, text, checked) {
+    async updateTodo(title, text, checked) {
         const file = this.app.workspace.getActiveFile();
         if (!file) return;
 
         const content = await this.app.vault.read(file);
         const esc = text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-        const re = new RegExp(`(\\[${date}\\][\\s\\S]*?^\\s*- \\[)([ x])(\\] ${esc})`, "gm");
+        // 转义标题中的特殊字符
+        const escTitle = title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        const re = new RegExp(`(\\[${escTitle}\\][\\s\\S]*?^\\s*- \\[)([ x])(\\] ${esc})`, "gm");
         const newContent = content.replace(re, (m, g1, g2, g3) => g1 + (checked ? "x" : " ") + g3);
 
         await this.app.vault.modify(file, newContent);
